@@ -1,1221 +1,171 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <title>DearERP – Odoo AI Copilot & Assistant | Talk to Your Odoo</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="description" content="DearERP is an Odoo AI copilot that lets you talk to your Odoo data, configure modules, and automate workflows just by chatting." />
-  <link rel="icon" href="favicon.ico" />
-
-  <!-- Basic Open Graph -->
-  <meta property="og:title" content="DearERP – Odoo AI Copilot & Assistant" />
-  <meta property="og:description" content="Talk to your Odoo, configure modules, and automate workflows just by chatting." />
-  <meta property="og:type" content="website" />
-  <meta property="og:url" content="https://dearerp.com/" />
-
-  <style>
-    :root {
-      --primary: #5b4bff;
-      --primary-soft: #ebe9ff;
-      --dark: #050816;
-      --gray-900: #111827;
-      --gray-700: #4b5563;
-      --gray-500: #6b7280;
-      --gray-200: #e5e7eb;
-      --gray-100: #f3f4f6;
-      --white: #ffffff;
-      --accent: #22c55e;
-      --danger: #ef4444;
-      --radius-lg: 18px;
-      --shadow-soft: 0 18px 45px rgba(15, 23, 42, 0.18);
-      --max-width: 1100px;
-    }
-
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
-    body {
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
-        sans-serif;
-      background: radial-gradient(circle at top left, #111827 0, #020617 40%, #020617 100%);
-      color: var(--white);
-      line-height: 1.6;
-      -webkit-font-smoothing: antialiased;
-    }
-
-    a {
-      text-decoration: none;
-      color: inherit;
-    }
-
-    .page {
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-    }
-
-    .wrapper {
-      width: 100%;
-      max-width: var(--max-width);
-      margin: 0 auto;
-      padding: 0 1.5rem;
-    }
-
-    /* NAVBAR */
-    .navbar {
-      position: sticky;
-      top: 0;
-      z-index: 30;
-      backdrop-filter: blur(16px);
-      background: linear-gradient(
-        to bottom,
-        rgba(15, 23, 42, 0.9),
-        rgba(15, 23, 42, 0.4),
-        transparent
-      );
-      border-bottom: 1px solid rgba(148, 163, 184, 0.18);
-    }
-
-    .nav-inner {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 1rem 1.5rem;
-    }
-
-    .logo {
-      display: flex;
-      align-items: center;
-      gap: 0.6rem;
-    }
-
-    .logo-mark {
-      width: 34px;
-      height: 34px;
-      border-radius: 999px;
-      background: radial-gradient(circle at 30% 0, #e5e7eb, #4f46e5);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: 800;
-      font-size: 0.9rem;
-      box-shadow: 0 8px 25px rgba(79, 70, 229, 0.65);
-    }
-
-    .logo-text-main {
-      font-weight: 700;
-      letter-spacing: 0.04em;
-      font-size: 1.1rem;
-    }
-
-    .logo-text-sub {
-      font-size: 0.75rem;
-      color: #a5b4fc;
-    }
-
-    .nav-links {
-      display: flex;
-      gap: 1.5rem;
-      font-size: 0.9rem;
-      color: #cbd5f5;
-    }
-
-    .nav-links a {
-      position: relative;
-      padding-bottom: 0.1rem;
-    }
-
-    .nav-links a::after {
-      content: "";
-      position: absolute;
-      left: 0;
-      bottom: 0;
-      width: 0;
-      height: 2px;
-      border-radius: 999px;
-      background: linear-gradient(to right, #22c55e, #a855f7);
-      transition: width 0.18s ease-out;
-    }
-
-    .nav-links a:hover::after {
-      width: 100%;
-    }
-
-    .nav-cta {
-      display: flex;
-      align-items: center;
-      gap: 0.75rem;
-    }
-
-    .btn {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      border-radius: 999px;
-      padding: 0.6rem 1.4rem;
-      font-size: 0.85rem;
-      font-weight: 600;
-      border: 1px solid transparent;
-      cursor: pointer;
-      white-space: nowrap;
-      transition: transform 0.12s ease-out, box-shadow 0.12s ease-out,
-        background 0.12s ease-out, border-color 0.12s ease-out, color 0.12s ease-out;
-    }
-
-    .btn-primary {
-      background: linear-gradient(135deg, #4f46e5, #6366f1);
-      border-color: rgba(191, 219, 254, 0.4);
-      box-shadow: 0 12px 30px rgba(79, 70, 229, 0.55);
-      color: white;
-    }
-
-    .btn-primary:hover {
-      transform: translateY(-1px);
-      box-shadow: 0 16px 38px rgba(79, 70, 229, 0.7);
-    }
-
-    .btn-outline {
-      background: transparent;
-      border-color: rgba(148, 163, 184, 0.5);
-      color: #e5e7eb;
-    }
-
-    .btn-outline:hover {
-      background: rgba(15, 23, 42, 0.9);
-      transform: translateY(-1px);
-    }
-
-    @media (max-width: 768px) {
-      .nav-links {
-        display: none;
-      }
-    }
-
-    /* HERO */
-    .hero {
-      padding: 3.5rem 0 2.5rem;
-    }
-
-    .hero-grid {
-      display: grid;
-      grid-template-columns: minmax(0, 1.4fr) minmax(0, 1.1fr);
-      gap: 3rem;
-      align-items: center;
-    }
-
-    @media (max-width: 900px) {
-      .hero-grid {
-        grid-template-columns: minmax(0, 1fr);
-        gap: 2.5rem;
-      }
-    }
-
-    .hero-kicker {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.5rem;
-      padding: 0.2rem 0.7rem;
-      border-radius: 999px;
-      border: 1px solid rgba(148, 163, 184, 0.7);
-      background: linear-gradient(
-        to right,
-        rgba(148, 163, 184, 0.15),
-        rgba(59, 130, 246, 0.2)
-      );
-      font-size: 0.75rem;
-      color: #e5e7eb;
-      margin-bottom: 1rem;
-    }
-
-    .hero-kicker span.badge {
-      padding: 0.1rem 0.5rem;
-      border-radius: 999px;
-      background: rgba(34, 197, 94, 0.18);
-      font-size: 0.7rem;
-      border: 1px solid rgba(74, 222, 128, 0.4);
-    }
-
-    .hero-title {
-      font-size: clamp(2.1rem, 3.2vw + 1.2rem, 3.4rem);
-      font-weight: 800;
-      letter-spacing: -0.04em;
-      margin-bottom: 1rem;
-    }
-
-    .hero-title span.gradient {
-      background: linear-gradient(120deg, #a855f7, #22c55e, #38bdf8);
-      -webkit-background-clip: text;
-      background-clip: text;
-      color: transparent;
-      text-shadow: 0 0 28px rgba(34, 197, 94, 0.4);
-    }
-
-    .hero-subtitle {
-      font-size: 0.98rem;
-      max-width: 32rem;
-      color: #cbd5f5;
-      margin-bottom: 1.6rem;
-    }
-
-    .hero-subtitle strong {
-      color: #e5e7eb;
-    }
-
-    .hero-cta-row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.9rem;
-      margin-bottom: 1.2rem;
-    }
-
-    .hero-footnote {
-      display: flex;
-      align-items: center;
-      gap: 0.55rem;
-      font-size: 0.8rem;
-      color: #9ca3af;
-    }
-
-    .hero-footnote-dot {
-      width: 7px;
-      height: 7px;
-      border-radius: 999px;
-      background: var(--accent);
-      box-shadow: 0 0 14px rgba(34, 197, 94, 0.9);
-    }
-
-    .hero-right-card {
-      border-radius: 24px;
-      background:
-        radial-gradient(circle at top left, rgba(34, 197, 94, 0.09), transparent 55%),
-        radial-gradient(circle at bottom right, rgba(59, 130, 246, 0.12), transparent 56%),
-        #020617;
-      border: 1px solid rgba(148, 163, 184, 0.28);
-      box-shadow: var(--shadow-soft);
-      padding: 1.5rem 1.3rem 1.5rem;
-    }
-
-    .hero-right-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 0.8rem;
-    }
-
-    .hero-pill {
-      font-size: 0.7rem;
-      padding: 0.25rem 0.7rem;
-      border-radius: 999px;
-      border: 1px solid rgba(148, 163, 184, 0.6);
-      background: rgba(15, 23, 42, 0.7);
-      color: #e5e7eb;
-    }
-
-    .hero-status {
-      display: flex;
-      align-items: center;
-      gap: 0.4rem;
-      font-size: 0.72rem;
-      color: #a5b4fc;
-    }
-
-    .status-dot {
-      width: 7px;
-      height: 7px;
-      border-radius: 999px;
-      background: var(--accent);
-    }
-
-    .chat-window {
-      border-radius: 18px;
-      background: rgba(15, 23, 42, 0.92);
-      border: 1px solid rgba(148, 163, 184, 0.5);
-      padding: 1rem;
-      font-size: 0.84rem;
-    }
-
-    .chat-row {
-      display: flex;
-      gap: 0.65rem;
-      margin-bottom: 0.85rem;
-    }
-
-    .chat-avatar {
-      width: 26px;
-      height: 26px;
-      border-radius: 999px;
-      background: radial-gradient(circle at 30% 0, #f9fafb, #4f46e5);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 0.72rem;
-      font-weight: 700;
-      flex-shrink: 0;
-    }
-
-    .chat-bubble {
-      padding: 0.6rem 0.75rem;
-      border-radius: 0.9rem;
-      background: #020617;
-      border: 1px solid rgba(55, 65, 81, 0.75);
-      color: #e5e7eb;
-      max-width: 100%;
-    }
-
-    .chat-bubble.agent {
-      background: radial-gradient(circle at top left, rgba(79, 70, 229, 0.8), #2563eb);
-      border-color: transparent;
-      box-shadow: 0 12px 25px rgba(37, 99, 235, 0.6);
-    }
-
-    .chat-meta {
-      display: flex;
-      justify-content: space-between;
-      margin-top: 0.4rem;
-      font-size: 0.7rem;
-      color: #9ca3af;
-    }
-
-    .chat-input {
-      margin-top: 0.9rem;
-      display: flex;
-      align-items: center;
-      gap: 0.6rem;
-    }
-
-    .chat-input-box {
-      flex: 1;
-      border-radius: 999px;
-      background: rgba(15, 23, 42, 0.9);
-      border: 1px solid rgba(75, 85, 99, 0.8);
-      padding: 0.55rem 0.9rem;
-      font-size: 0.8rem;
-      color: #e5e7eb;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-
-    .chat-input-placeholder {
-      color: #6b7280;
-    }
-
-    .chat-chip {
-      font-size: 0.7rem;
-      padding: 0.15rem 0.5rem;
-      border-radius: 999px;
-      background: rgba(30, 64, 175, 0.7);
-      color: #e5e7eb;
-      border: 1px solid rgba(129, 140, 248, 0.7);
-    }
-
-    .chat-input-btn {
-      border-radius: 999px;
-      border: none;
-      padding: 0.55rem 0.9rem;
-      font-size: 0.78rem;
-      font-weight: 600;
-      background: linear-gradient(135deg, #22c55e, #4ade80);
-      color: #022c22;
-      cursor: pointer;
-      box-shadow: 0 10px 22px rgba(34, 197, 94, 0.6);
-      display: flex;
-      align-items: center;
-      gap: 0.3rem;
-    }
-
-    .chat-input-btn span.icon {
-      font-size: 0.85rem;
-    }
-
-    .hero-stats {
-      margin-top: 1.1rem;
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 0.7rem;
-      font-size: 0.72rem;
-      color: #cbd5f5;
-    }
-
-    .hero-stat-card {
-      border-radius: 0.8rem;
-      border: 1px solid rgba(148, 163, 184, 0.5);
-      background: rgba(15, 23, 42, 0.8);
-      padding: 0.45rem 0.6rem;
-    }
-
-    .hero-stat-label {
-      color: #9ca3af;
-      font-size: 0.7rem;
-    }
-
-    .hero-stat-value {
-      font-weight: 600;
-      font-size: 0.9rem;
-    }
-
-    /* SECTIONS */
-    .section {
-      padding: 2.8rem 0 0;
-    }
-
-    .section-header {
-      text-align: center;
-      margin-bottom: 1.7rem;
-    }
-
-    .section-kicker {
-      font-size: 0.75rem;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: #a5b4fc;
-      margin-bottom: 0.3rem;
-    }
-
-    .section-title {
-      font-size: 1.6rem;
-      font-weight: 700;
-      letter-spacing: -0.03em;
-      margin-bottom: 0.4rem;
-    }
-
-    .section-subtitle {
-      font-size: 0.9rem;
-      color: #9ca3af;
-      max-width: 32rem;
-      margin: 0 auto;
-    }
-
-    /* FEATURE GRID */
-    .feature-grid {
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 1.4rem;
-    }
-
-    @media (max-width: 900px) {
-      .feature-grid {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-      }
-    }
-
-    @media (max-width: 640px) {
-      .feature-grid {
-        grid-template-columns: minmax(0, 1fr);
-      }
-    }
-
-    .card {
-      border-radius: var(--radius-lg);
-      background: rgba(15, 23, 42, 0.9);
-      border: 1px solid rgba(148, 163, 184, 0.4);
-      padding: 1.1rem 1.05rem 1rem;
-      font-size: 0.86rem;
-    }
-
-    .card-tag {
-      font-size: 0.7rem;
-      padding: 0.15rem 0.55rem;
-      border-radius: 999px;
-      border: 1px solid rgba(129, 140, 248, 0.7);
-      color: #c7d2fe;
-      margin-bottom: 0.6rem;
-      display: inline-flex;
-      align-items: center;
-      gap: 0.35rem;
-    }
-
-    .card-tag-dot {
-      width: 6px;
-      height: 6px;
-      border-radius: 999px;
-      background: #4ade80;
-    }
-
-    .card-title {
-      font-size: 1rem;
-      font-weight: 600;
-      margin-bottom: 0.35rem;
-    }
-
-    .card-body {
-      color: #9ca3af;
-    }
-
-    /* HOW IT WORKS */
-    .how-grid {
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 1.2rem;
-      margin-top: 1.2rem;
-    }
-
-    @media (max-width: 900px) {
-      .how-grid {
-        grid-template-columns: minmax(0, 1fr);
-      }
-    }
-
-    .step-circle {
-      width: 24px;
-      height: 24px;
-      border-radius: 999px;
-      border: 1px solid rgba(129, 140, 248, 0.7);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 0.75rem;
-      margin-bottom: 0.4rem;
-      background: rgba(15, 23, 42, 0.7);
-    }
-
-    /* USE CASES */
-    .pill-row {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 0.6rem;
-      margin-top: 1rem;
-    }
-
-    .pill {
-      font-size: 0.78rem;
-      padding: 0.28rem 0.8rem;
-      border-radius: 999px;
-      border: 1px solid rgba(148, 163, 184, 0.5);
-      background: rgba(15, 23, 42, 0.8);
-      color: #e5e7eb;
-    }
-
-    /* PRICING PREVIEW */
-    .pricing-wrap {
-      max-width: 760px;
-      margin: 0 auto;
-      display: grid;
-      grid-template-columns: minmax(0, 1.2fr) minmax(0, 0.9fr);
-      gap: 1.4rem;
-      align-items: center;
-    }
-
-    @media (max-width: 900px) {
-      .pricing-wrap {
-        grid-template-columns: minmax(0, 1fr);
-      }
-    }
-
-    .pricing-card {
-      border-radius: var(--radius-lg);
-      background: rgba(15, 23, 42, 0.9);
-      border: 1px solid rgba(129, 140, 248, 0.6);
-      padding: 1.2rem 1.2rem 1.1rem;
-      box-shadow: 0 18px 40px rgba(15, 23, 42, 0.4);
-    }
-
-    .price-label {
-      font-size: 0.7rem;
-      text-transform: uppercase;
-      letter-spacing: 0.16em;
-      color: #a5b4fc;
-      margin-bottom: 0.4rem;
-    }
-
-    .price-value {
-      font-size: 1.8rem;
-      font-weight: 700;
-      letter-spacing: -0.04em;
-    }
-
-    .price-hint {
-      font-size: 0.8rem;
-      color: #9ca3af;
-      margin-top: 0.3rem;
-    }
-
-    .price-list {
-      margin-top: 0.8rem;
-      list-style: none;
-      font-size: 0.82rem;
-      color: #e5e7eb;
-    }
-
-    .price-list li {
-      display: flex;
-      align-items: flex-start;
-      gap: 0.45rem;
-      margin-bottom: 0.4rem;
-    }
-
-    .price-icon {
-      font-size: 0.85rem;
-      line-height: 1.4;
-    }
-
-    .pricing-note {
-      font-size: 0.8rem;
-      color: #9ca3af;
-    }
-
-    .pricing-note strong {
-      color: #e5e7eb;
-    }
-
-    /* FAQ */
-    .faq-grid {
-      max-width: 760px;
-      margin: 1.5rem auto 0;
-      display: grid;
-      gap: 0.9rem;
-    }
-
-    .faq-item {
-      border-radius: 14px;
-      border: 1px solid rgba(148, 163, 184, 0.5);
-      background: rgba(15, 23, 42, 0.9);
-      padding: 0.9rem 1rem;
-      font-size: 0.85rem;
-    }
-
-    .faq-q {
-      font-weight: 600;
-      margin-bottom: 0.25rem;
-    }
-
-    .faq-a {
-      color: #9ca3af;
-    }
-
-    /* CTA STRIP */
-    .cta-strip {
-      margin: 3rem 0 2.4rem;
-      border-radius: 22px;
-      padding: 1.4rem 1.6rem;
-      background: radial-gradient(circle at top left, rgba(79, 70, 229, 0.88), #22c55e);
-      box-shadow: 0 25px 60px rgba(34, 197, 94, 0.7);
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      gap: 1rem;
-      justify-content: space-between;
-      color: #ecfeff;
-    }
-
-    .cta-strip-title {
-      font-size: 1.35rem;
-      font-weight: 700;
-      letter-spacing: -0.03em;
-    }
-
-    .cta-strip-sub {
-      font-size: 0.86rem;
-      margin-top: 0.15rem;
-      color: #e0f2fe;
-    }
-
-    .cta-strip-actions {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.6rem;
-    }
-
-    .btn-ghost-light {
-      border-radius: 999px;
-      padding: 0.55rem 1.1rem;
-      font-size: 0.82rem;
-      border: 1px solid rgba(248, 250, 252, 0.7);
-      background: rgba(15, 23, 42, 0.1);
-      color: #f9fafb;
-    }
-
-    .btn-ghost-light:hover {
-      background: rgba(15, 23, 42, 0.24);
-    }
-
-    /* FOOTER */
-    .footer {
-      border-top: 1px solid rgba(148, 163, 184, 0.4);
-      margin-top: auto;
-      padding: 1.5rem 0 2rem;
-      font-size: 0.8rem;
-      color: #9ca3af;
-    }
-
-    .footer-inner {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: space-between;
-      gap: 0.8rem;
-      align-items: center;
-    }
-
-    .footer-links {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.8rem;
-    }
-
-    .footer-links a {
-      color: #d1d5db;
-    }
-
-    .footer-links a:hover {
-      color: #e5e7eb;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <title>DearERP – Odoo AI Copilot & Assistant</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="DearERP is an Odoo AI copilot that lets you talk to your Odoo data, configure workflows, and get instant insights just by chatting.">
+    <style>
+        body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, Segoe UI, sans-serif;
+            padding: 20px;
+            max-width: 760px;
+            margin: auto;
+            line-height: 1.6;
+            background: #fafafa;
+            color: #222;
+        }
+        h1, h2, h3 {
+            color: #111;
+        }
+        a {
+            color: #1a73e8;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        code {
+            background: #eee;
+            padding: 2px 4px;
+            border-radius: 4px;
+        }
+        .section {
+            margin: 32px 0;
+        }
+    </style>
 </head>
 <body>
-  <div class="page">
-    <!-- NAV -->
-    <header class="navbar">
-      <div class="wrapper nav-inner">
-        <a href="#" class="logo">
-          <div class="logo-mark">D</div>
-          <div>
-            <div class="logo-text-main">DearERP</div>
-            <div class="logo-text-sub">Odoo AI Copilot</div>
-          </div>
+
+<h1>DearERP – Odoo AI Copilot for Modern Odoo Teams</h1>
+
+<p>
+    <a href="https://dearerp.com" target="_blank"><strong>DearERP</strong></a>
+    is an AI assistant and copilot for Odoo that helps founders, CFOs,
+    sales leaders, and operations teams get instant answers from Odoo
+    without digging through menus or building complex filters.
+</p>
+
+<p>
+    This page explains what DearERP does, how it helps Odoo companies,
+    and links to the official website and repository.
+</p>
+
+<div class="section">
+    <h2>What is DearERP?</h2>
+    <p>
+        DearERP sits on top of your existing Odoo instance and allows you to interact with it
+        naturally — by typing questions or instructions. It understands Odoo concepts such as:
+    </p>
+
+    <ul>
+        <li><code>sale.order</code></li>
+        <li><code>account.move</code></li>
+        <li><code>stock.picking</code></li>
+        <li>Quotations, invoices, journals, products, partners, workflows</li>
+    </ul>
+
+    <p>You can ask questions like:</p>
+
+    <blockquote>
+        “Show me all customers in Saudi Arabia with unpaid invoices over 100,000 SAR this quarter.”
+    </blockquote>
+
+    <blockquote>
+        “Help me configure e-invoicing for ZATCA in this Odoo database.”
+    </blockquote>
+
+    <p>
+        DearERP converts natural language into Odoo-ready logic and returns clean, actionable answers.
+    </p>
+</div>
+
+<div class="section">
+    <h2>Who is DearERP for?</h2>
+    <p>It helps many types of Odoo users, including:</p>
+
+    <ul>
+        <li><strong>Founders & CEOs</strong> – instant answers about sales, customers, and revenue</li>
+        <li><strong>CFOs & Finance Teams</strong> – aging reports, receivables, profitability</li>
+        <li><strong>Sales Leaders</strong> – pipeline health, quotations, win/loss metrics</li>
+        <li><strong>Operations</strong> – stockouts, deliveries, bottlenecks</li>
+        <li><strong>Odoo Partners</strong> – reduce client “how do I do X?” questions</li>
+    </ul>
+</div>
+
+<div class="section">
+    <h2>Key Capabilities</h2>
+
+    <h3>1. Chat with Odoo Data</h3>
+    <p>
+        Instead of building new filters each time, you can ask:
+    </p>
+    <ul>
+        <li>“Top 10 products by margin last quarter”</li>
+        <li>“Which customers haven’t ordered in 90 days?”</li>
+        <li>“Show quotations older than 30 days without follow-up.”</li>
+    </ul>
+
+    <h3>2. Configure Odoo by Conversation</h3>
+    <p>
+        DearERP helps you set up new workflows and approvals by describing them:
+    </p>
+
+    <blockquote>
+        “Create an approval rule: any quotation above 50,000 must be approved by a sales manager.”
+    </blockquote>
+
+    <h3>3. Built-in Training</h3>
+    <p>
+        New users can ask:
+    </p>
+    <ul>
+        <li>“How do I create a down payment invoice?”</li>
+        <li>“What is the return process in our Odoo?”</li>
+    </ul>
+
+    <h3>4. Automation</h3>
+    <p>
+        Save prompts or create micro-playbooks for:
+    </p>
+
+    <ul>
+        <li>Weekly finance summaries</li>
+        <li>Quotation follow-ups</li>
+        <li>Customer risk alerts</li>
+    </ul>
+</div>
+
+<div class="section">
+    <h2>Why Odoo Needs an AI Copilot</h2>
+    <p>
+        Odoo is powerful, but most users only scratch the surface.
+        DearERP reduces the learning curve, boosts adoption, and gives everyone —
+        not just consultants — the ability to use Odoo effectively.
+    </p>
+</div>
+
+<div class="section">
+    <h2>Learn More</h2>
+    <p>
+        🌐 Official Website:  
+        <a href="https://dearerp.com" target="_blank">https://dearerp.com</a>
+    </p>
+
+    <p>
+        📦 GitHub Repository for this Page:  
+        <a href="https://github.com/simpsoncarlos3/dearerp-page" target="_blank">
+            https://github.com/simpsoncarlos3/dearerp-page
         </a>
-        <nav class="nav-links">
-          <a href="#features">Features</a>
-          <a href="#how-it-works">How it works</a>
-          <a href="#use-cases">Use cases</a>
-          <a href="#pricing">Pricing</a>
-          <a href="#faq">FAQ</a>
-        </nav>
-        <div class="nav-cta">
-          <a href="mailto:hello@dearerp.com" class="btn btn-outline">Contact sales</a>
-          <a href="#demo" class="btn btn-primary">Book a live demo</a>
-        </div>
-      </div>
-    </header>
+    </p>
+</div>
 
-    <!-- HERO -->
-    <main>
-      <section class="hero">
-        <div class="wrapper hero-grid">
-          <div>
-            <div class="hero-kicker">
-              <span class="badge">New</span>
-              <span>AI copilot for Odoo teams</span>
-            </div>
-            <h1 class="hero-title">
-              <span class="gradient">Talk to your Odoo.</span><br />
-              Configure, analyze & automate — just by chatting.
-            </h1>
-            <p class="hero-subtitle">
-              <strong>DearERP</strong> is an Odoo AI assistant &amp; copilot.
-              Ask questions in plain English, configure settings, generate reports
-              and get real-time insights from your Odoo data — without digging
-              through menus or writing a single line of code.
-            </p>
-            <div class="hero-cta-row">
-              <a href="#demo" class="btn btn-primary">
-                Book a 20-min discovery call →
-              </a>
-              <a href="mailto:hello@dearerp.com?subject=DearERP%20Pilot%20Access" class="btn btn-outline">
-                Request pilot access
-              </a>
-            </div>
-            <div class="hero-footnote">
-              <div class="hero-footnote-dot"></div>
-              <span>Designed for Odoo implementers, CFOs, founders & ops teams.</span>
-            </div>
-          </div>
+<hr>
 
-          <div class="hero-right-card">
-            <div class="hero-right-header">
-              <span class="hero-pill">DearERP · Chat with your Odoo</span>
-              <div class="hero-status">
-                <span class="status-dot"></span>
-                <span>Live on internal instances</span>
-              </div>
-            </div>
-            <div class="chat-window">
-              <div class="chat-row">
-                <div class="chat-avatar">ME</div>
-                <div>
-                  <div class="chat-bubble">
-                    Show me customers in Saudi Arabia with
-                    <strong>over 100,000 SAR</strong> in unpaid invoices this quarter.
-                  </div>
-                  <div class="chat-meta">
-                    <span>You · Sales / Finance</span>
-                    <span>09:12</span>
-                  </div>
-                </div>
-              </div>
-              <div class="chat-row">
-                <div class="chat-avatar">AI</div>
-                <div>
-                  <div class="chat-bubble agent">
-                    I found <strong>12 customers</strong> matching your filters.
-                    Your top 3 overdue balances are:
-                    <ul style="margin: 0.4rem 0 0 1.1rem;">
-                      <li>Falcon Trading – 287,400 SAR (avg. delay: 46 days)</li>
-                      <li>Blue Sands LLC – 193,200 SAR (avg. delay: 32 days)</li>
-                      <li>Al Noor Logistics – 158,750 SAR (avg. delay: 55 days)</li>
-                    </ul>
-                    I can:
-                    <ul style="margin: 0.4rem 0 0 1.1rem;">
-                      <li>Create a <strong>dunning follow-up plan</strong> in Odoo</li>
-                      <li>Generate a <strong>CSV report</strong> for your finance team</li>
-                      <li>Draft <strong>payment reminder emails</strong> per customer</li>
-                    </ul>
-                  </div>
-                  <div class="chat-meta">
-                    <span>DearERP · Odoo AI Copilot</span>
-                    <span>09:12 · 1.1s</span>
-                  </div>
-                </div>
-              </div>
+<p style="font-size: 14px; color: #555;">
+    © <script>document.write(new Date().getFullYear())</script> DearERP.  
+    This is an informational GitHub Pages article about the DearERP AI assistant for Odoo.
+</p>
 
-              <div class="chat-input">
-                <div class="chat-input-box">
-                  <span class="chat-input-placeholder">“Configure e-invoicing for Saudi ZATCA in my Odoo...”</span>
-                  <span class="chat-chip">↵ Ask</span>
-                </div>
-                <button class="chat-input-btn">
-                  <span class="icon">✦</span>
-                  <span>Send</span>
-                </button>
-              </div>
-            </div>
-
-            <div class="hero-stats">
-              <div class="hero-stat-card">
-                <div class="hero-stat-label">Time to first insight</div>
-                <div class="hero-stat-value">Under 5 min</div>
-              </div>
-              <div class="hero-stat-card">
-                <div class="hero-stat-label">Odoo expertise baked in</div>
-                <div class="hero-stat-value">Finance · Sales · Ops</div>
-              </div>
-              <div class="hero-stat-card">
-                <div class="hero-stat-label">Works with</div>
-                <div class="hero-stat-value">Modern Odoo deployments</div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- FEATURES -->
-      <section id="features" class="section">
-        <div class="wrapper">
-          <div class="section-header">
-            <div class="section-kicker">Why DearERP</div>
-            <h2 class="section-title">Turn every Odoo user into a power user.</h2>
-            <p class="section-subtitle">
-              DearERP sits on top of your existing Odoo instance and gives your team
-              a conversational layer for configuration, reporting, analysis and training.
-            </p>
-          </div>
-
-          <div class="feature-grid">
-            <div class="card">
-              <div class="card-tag">
-                <span class="card-tag-dot"></span>
-                <span>Chat with your data</span>
-              </div>
-              <h3 class="card-title">Natural language queries</h3>
-              <p class="card-body">
-                Ask “What were our top 10 products by margin in Q3?” or
-                “Show me all quotations older than 30 days without follow-up”
-                and DearERP turns it into the right Odoo queries behind the scenes.
-              </p>
-            </div>
-
-            <div class="card">
-              <div class="card-tag">
-                <span class="card-tag-dot"></span>
-                <span>Configuration by chat</span>
-              </div>
-              <h3 class="card-title">Set up Odoo like you talk</h3>
-              <p class="card-body">
-                Need a new sales workflow, approval rule or field? Describe it in chat.
-                DearERP guides you step-by-step and prepares the configuration — ready for
-                review and apply.
-              </p>
-            </div>
-
-            <div class="card">
-              <div class="card-tag">
-                <span class="card-tag-dot"></span>
-                <span>Guided training</span>
-              </div>
-              <h3 class="card-title">Onboard new team members faster</h3>
-              <p class="card-body">
-                New users can ask “How do I create a down payment invoice?” and
-                get answers tailored to <em>your</em> Odoo setup, not generic docs.
-                Perfect for distributed teams.
-              </p>
-            </div>
-
-            <div class="card">
-              <div class="card-tag">
-                <span class="card-tag-dot"></span>
-                <span>Automation</span>
-              </div>
-              <h3 class="card-title">From insight to action</h3>
-              <p class="card-body">
-                Turn recurring questions into saved prompts and micro-playbooks.
-                For example: send reminders, update stages, create scheduled actions or
-                generate summaries for management.
-              </p>
-            </div>
-
-            <div class="card">
-              <div class="card-tag">
-                <span class="card-tag-dot"></span>
-                <span>Odoo-native</span>
-              </div>
-              <h3 class="card-title">Built around Odoo semantics</h3>
-              <p class="card-body">
-                DearERP understands models like <code>sale.order</code>,
-                <code>account.move</code>, <code>stock.picking</code> and more.
-                It’s not a generic chatbot — it speaks Odoo.
-              </p>
-            </div>
-
-            <div class="card">
-              <div class="card-tag">
-                <span class="card-tag-dot"></span>
-                <span>For partners & in-house teams</span>
-              </div>
-              <h3 class="card-title">Make your Odoo services sticky</h3>
-              <p class="card-body">
-                Offer DearERP as an AI layer on top of your implementations.
-                Reduce tickets, increase adoption and position yourself as an AI-first
-                Odoo partner.
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- HOW IT WORKS -->
-      <section id="how-it-works" class="section">
-        <div class="wrapper">
-          <div class="section-header">
-            <div class="section-kicker">How it works</div>
-            <h2 class="section-title">Up and running in three simple steps.</h2>
-            <p class="section-subtitle">
-              You don’t have to rebuild your ERP. DearERP connects to your existing Odoo
-              and adds an AI copilot on top of it.
-            </p>
-          </div>
-
-          <div class="how-grid">
-            <div class="card">
-              <div class="step-circle">1</div>
-              <h3 class="card-title">Connect your Odoo</h3>
-              <p class="card-body">
-                We connect to your Odoo instance using secure APIs and read-only access.
-                Together we define which models and companies DearERP can see.
-              </p>
-            </div>
-
-            <div class="card">
-              <div class="step-circle">2</div>
-              <h3 class="card-title">Teach DearERP your business</h3>
-              <p class="card-body">
-                We ingest your existing workflows, naming conventions and key reports.
-                The copilot learns how <em>you</em> sell, purchase, manufacture and account.
-              </p>
-            </div>
-
-            <div class="card">
-              <div class="step-circle">3</div>
-              <h3 class="card-title">Roll out to your team</h3>
-              <p class="card-body">
-                Start with finance, sales or operations and expand gradually.
-                You control who can ask what, and which actions the AI can execute
-                vs. only suggest.
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- USE CASES -->
-      <section id="use-cases" class="section">
-        <div class="wrapper">
-          <div class="section-header">
-            <div class="section-kicker">Use cases</div>
-            <h2 class="section-title">Built for fast-moving Odoo companies.</h2>
-            <p class="section-subtitle">
-              DearERP helps teams who live inside Odoo all day — from regional trading
-              companies to SaaS businesses and manufacturers.
-            </p>
-          </div>
-
-          <div class="pill-row">
-            <div class="pill">CFOs & finance teams — instant cashflow & aging views</div>
-            <div class="pill">Founders — quick answers about sales & profitability</div>
-            <div class="pill">Sales leaders — pipeline, quotations & win-rate insights</div>
-            <div class="pill">Operations — delays, stockouts & fulfillment exceptions</div>
-            <div class="pill">Odoo partners — reduce recurring “how do I…” tickets</div>
-            <div class="pill">Multi-country implementations — localized questions</div>
-          </div>
-        </div>
-      </section>
-
-      <!-- PRICING / CTA -->
-      <section id="pricing" class="section">
-        <div class="wrapper">
-          <div class="section-header">
-            <div class="section-kicker">Pricing</div>
-            <h2 class="section-title">Start with a focused pilot, then scale.</h2>
-            <p class="section-subtitle">
-              We typically start with a limited scope (one instance / one department),
-              prove value within a few weeks, and then expand.
-            </p>
-          </div>
-
-          <div class="pricing-wrap">
-            <div class="pricing-card">
-              <div class="price-label">Pilot program</div>
-              <div class="price-value">Custom quote</div>
-              <p class="price-hint">
-                Ideal for 5-50 Odoo users. Includes setup, tuning and success check-ins.
-              </p>
-              <ul class="price-list">
-                <li>
-                  <span class="price-icon">✔</span>
-                  <span>1x Odoo instance connected (staging or production)</span>
-                </li>
-                <li>
-                  <span class="price-icon">✔</span>
-                  <span>Dedicated onboarding & best-practice configuration</span>
-                </li>
-                <li>
-                  <span class="price-icon">✔</span>
-                  <span>Use-case design for finance, sales or operations</span>
-                </li>
-                <li>
-                  <span class="price-icon">✔</span>
-                  <span>Usage analytics & success review at the end of pilot</span>
-                </li>
-              </ul>
-              <div style="margin-top: 0.9rem;">
-                <a href="mailto:hello@dearerp.com?subject=DearERP%20Pilot%20Request" class="btn btn-primary" style="width: 100%; justify-content: center;">
-                  Request pricing & pilot →
-                </a>
-              </div>
-            </div>
-
-            <div>
-              <p class="pricing-note">
-                <strong>Odoo partners:</strong> We also offer a partner-friendly model
-                so you can bundle DearERP with your implementation and support services.
-                White-label options and country-specific playbooks are available.
-              </p>
-              <p class="pricing-note" style="margin-top: 0.7rem;">
-                Tell us about your current Odoo landscape, number of users and
-                countries you operate in, and we’ll recommend a rollout plan that
-                makes sense for your team.
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- FAQ -->
-      <section id="faq" class="section">
-        <div class="wrapper">
-          <div class="section-header">
-            <div class="section-kicker">FAQ</div>
-            <h2 class="section-title">Questions you might have.</h2>
-            <p class="section-subtitle">
-              A short FAQ to answer the basics. We’re happy to go deeper on a call.
-            </p>
-          </div>
-
-          <div class="faq-grid">
-            <div class="faq-item">
-              <div class="faq-q">Is DearERP a replacement for Odoo?</div>
-              <div class="faq-a">
-                No. DearERP is an AI layer <em>on top</em> of your existing Odoo instance.
-                Your data stays in Odoo — we simply make it dramatically easier
-                to query, configure and use.
-              </div>
-            </div>
-
-            <div class="faq-item">
-              <div class="faq-q">Which Odoo versions do you support?</div>
-              <div class="faq-a">
-                We focus on modern, actively used Odoo versions and typical deployment
-                patterns (on-prem, cloud or Odoo.sh). Share your current setup in a call
-                and we’ll confirm compatibility.
-              </div>
-            </div>
-
-            <div class="faq-item">
-              <div class="faq-q">How do you handle security & permissions?</div>
-              <div class="faq-a">
-                DearERP respects Odoo access rights. Users can only see and act on the
-                data their Odoo profile allows. You can also restrict which actions the
-                AI is allowed to perform directly vs. only suggest.
-              </div>
-            </div>
-
-            <div class="faq-item">
-              <div class="faq-q">Can you customize DearERP for our industry?</div>
-              <div class="faq-a">
-                Yes. We can tune prompts, workflows and “quick actions” for verticals
-                like trading, manufacturing, services, distribution and SaaS. The more
-                context you share, the more tailored DearERP becomes.
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- FINAL CTA -->
-      <section id="demo" class="section">
-        <div class="wrapper">
-          <div class="cta-strip">
-            <div>
-              <div class="cta-strip-title">Want to see DearERP on top of your Odoo?</div>
-              <div class="cta-strip-sub">
-                Share a bit about your instance and we’ll walk you through a live
-                copilot experience tailored to your workflows.
-              </div>
-            </div>
-            <div class="cta-strip-actions">
-              <a href="mailto:hello@dearerp.com?subject=DearERP%20Demo%20Request&body=Hi%2C%0A%0AWe%27d%20like%20to%20try%20DearERP%20with%20our%20Odoo.%20Here%20are%20some%20details%3A%0A-%20Odoo%20version%3A%0A-%20Hosted%20on%3A%20(on-prem%2Fcloud%2FOdoo.sh)%0A-%20Number%20of%20users%3A%0A-%20Main%20modules%3A%0A%0AThanks!" class="btn btn-ghost-light">
-                Email us details →
-              </a>
-              <!-- Replace this # with your actual Calendly/booking link when ready -->
-              <a href="#" class="btn btn-ghost-light">
-                Book a calendar slot
-              </a>
-            </div>
-          </div>
-        </div>
-      </section>
-    </main>
-
-    <!-- FOOTER -->
-    <footer class="footer">
-      <div class="wrapper footer-inner">
-        <div>© <span id="year"></span> DearERP. All rights reserved.</div>
-        <div class="footer-links">
-          <a href="mailto:hello@dearerp.com">hello@dearerp.com</a>
-          <span>·</span>
-          <a href="#features">Product</a>
-          <a href="#pricing">Pricing</a>
-          <a href="#demo">Book a demo</a>
-        </div>
-      </div>
-    </footer>
-  </div>
-
-  <script>
-    // Set current year in footer
-    document.getElementById('year').textContent = new Date().getFullYear();
-  </script>
 </body>
 </html>
